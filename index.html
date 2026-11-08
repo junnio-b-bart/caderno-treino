@@ -495,7 +495,7 @@ function vPlano(p){
       <h2>Planilha</h2>
       <p class="muted" style="font-size:14px">Cada treino e cada série vão pra planilha do Google, onde fica o histórico pra analisar progressão.</p>
       <label class="lbl" for="api">endereço do app da web (Apps Script)</label>
-      <input id="api" class="campo" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://script.google.com/macros/s/…/exec" value="${esc(lsGet(LS+":api","")||API_PADRAO)}">
+      <input id="api" class="campo" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="cole o endereço /exec ou só o código AKfy…" value="${esc(lsGet(LS+":api","")||API_PADRAO)}">
       <button class="btn small" data-act="salvar-api" style="align-self:flex-start">Salvar endereço</button>
     </div>
     <div>
@@ -657,7 +657,7 @@ document.addEventListener("click",ev=>{
     enfileirar({acao:"treino",treino:{id,data:d.marca,perfil:p.nome,treino:d.t,fase:nomeFase(p,parse(d.marca)),series:de,de,duracaoMin:"",comoFoi:"",nota:"Marcado depois, sem detalhe das séries"},series:[]});
     save(ui.who);render();return}
   if(d.desmarca){const p=prof(),l=p.log[d.desmarca];if(l&&l.id) enfileirar({acao:"removerTreino",id:l.id});delete p.log[d.desmarca];save(ui.who);render();return}
-  if(d.act==="salvar-api"){const v=(document.getElementById("api").value||"").trim();lsSet(LS+":api",v);syncState=v?"carregando":"sem-planilha";render();baixar();return}
+  if(d.act==="salvar-api"){let v=(document.getElementById("api").value||"").trim();if(v&&!/^https?:/.test(v))v="https://script.google.com/macros/s/"+v+"/exec";lsSet(LS+":api",v);syncState=v?"carregando":"sem-planilha";render();baixar();return}
   if(d.diaSem!=null){
     const p=prof(),i=Number(d.diaSem),k=key(today());
     let dias=[...(diasEm(p,today())||[])]; dias=dias.includes(i)?dias.filter(x=>x!==i):[...dias,i];
